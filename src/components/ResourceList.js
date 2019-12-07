@@ -1,5 +1,19 @@
 import React,{useState,useEffect} from "react"
 import Axios from "axios"
+const useResources=(resourc)=>{
+    const [resources,setResources]=useState([])
+
+    const fetchposts=async (resourc)=>{
+        const res=await Axios.get(`http://jsonplaceholder.typicode.com/${resourc}`)
+        setResources(res.data)
+    }
+
+    useEffect(()=>{
+        fetchposts(resourc)
+    },[resourc])
+
+    return resources
+}
 
 const ResourceList =({resourcelist})=>{
     // const {resourcelist}=props
@@ -19,20 +33,40 @@ const ResourceList =({resourcelist})=>{
     //         this.setState({resources:res.data})
     //     }
     // }
-    const [resources,setResources]=useState([])
-
-    const fetchposts=async (resourcelist)=>{
-        const res=await Axios.get(`http://jsonplaceholder.typicode.com/${resourcelist}`)
-        setResources(res.data)
-    }
-
-    useEffect(()=>{
-        fetchposts(resourcelist)
-    },[resourcelist])
+    const resources=useResources(resourcelist)
     
         return (
-        <div>{resources.length}</div>
+        // <div>{resources.length}</div>
+        <div>
+            <ul>
+                {resources.map(({id,title})=>(
+                    <li key={id}>
+                        {title}
+                    </li>
+                ))}
+            </ul>
+        </div>
         )
     
 }
 export default ResourceList
+
+
+
+// import React,{useState,useEffect} from "react"
+// import Axios from "axios"
+
+// const ResourceList =({resourcelist})=>{
+//     const [data,setdata]=useState([])
+//     const fetchPost=async ()=>{
+//         const res=await Axios.get(`http://jsonplaceholder.typicode.com/${resourcelist}`)
+//         setdata(res.data)
+//     }
+//     const data1=fetchPost()
+//     // console.log(data);
+    
+//     return (
+//     <div>{data.length}</div>
+//     )
+// }
+// export default ResourceList/
